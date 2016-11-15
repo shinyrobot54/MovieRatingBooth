@@ -9,20 +9,20 @@
 const PROMPT = require('readline-sync');
 
 let movies = [];
-let userActionChoice, movieChoice, averageMovieRating;
+let whichTask, whichMovie, avgMovieRating;
 
 function main() {
     process.stdout.write('\x1Bc'); //Clears the screen
     let infinite = 0;
     while (infinite < 1) {
         if (movies.length > 0) {
-            setUserActionChoice();
-            if (userActionChoice === 0) {
+            setWhichTask();
+            if (whichTask === 0) {
                 populateMovies();
             } else {
                 chooseMovie();
-                calculateAverageMovieRating();
-                displayAverageMovieRating();
+                setAvgMovieRating();
+                displayAvgMovieRating();
             }
         } else {
             populateMovies();
@@ -32,11 +32,11 @@ function main() {
 
 main();
 
-function setUserActionChoice() {
-    userActionChoice = -1;
+function setWhichTask() {
+    whichTask = -1;
     const RATE_MOVIE = 0, VIEW_MOVIE_RATING = 1;
-    while (userActionChoice !== RATE_MOVIE && userActionChoice !== VIEW_MOVIE_RATING) {
-        userActionChoice = Number(PROMPT.question(`\nWould you like to rate a movie [0] or view a movie rating [1]?`));
+    while (whichTask !== RATE_MOVIE && whichTask !== VIEW_MOVIE_RATING) {
+        whichTask = Number(PROMPT.question(`\nWould you like to rate a movie [0] or view a movie rating [1]?`));
     }
 }
 
@@ -85,7 +85,7 @@ function populateMovies() {
                 }
             } else if (i === MOVIE_RATING) {
                 while (movies[0][i] == null || isNaN(movies[0][i]) || movies[0][i] < MIN_STARS || movies[0][i] > MAX_STARS) {
-                    movies[0][i] = PROMPT.question(`\nRate ${movies[0][1]} on a scale 1 to 5 (5 being the best):`)
+                    movies[0][i] = PROMPT.question(`\nOn a scale 1 to 5 how many stars would you rate it? (5 being the best):`)
                 }
             } else if (i === TOTAL_MOVIE_RATING) {
                 movies[0][i] = movies[0][MOVIE_RATING];
@@ -100,14 +100,14 @@ function chooseMovie() {
     for (let i = 0; i < movies.length; i++) {
         console.log(`\n ${i} = ${movies[i][0]}`);
     }
-    movieChoice = Number(PROMPT.question('\n What is the number of the movie that you would like to view the rating of?:'));
+    whichMovie = Number(PROMPT.question('\n What is the number of the movie that you would like to view the rating of?:'));
 }
 
-function calculateAverageMovieRating() {
-    averageMovieRating = Number(movies[movieChoice][2] / movies[movieChoice][3]);
+function setAvgMovieRating() {
+    avgMovieRating = Number(movies[whichMovie][2] / movies[whichMovie][3]);
 }
 
-function displayAverageMovieRating() {
+function displayAvgMovieRating() {
     process.stdout.write('\x1Bc'); //Clears the screen
-    console.log(`\nThe average movie rating for ${movies[movieChoice][0]} is: ${averageMovieRating} stars`)
+    console.log(`\nThe average movie rating for ${movies[whichMovie][0]} is: ${avgMovieRating} stars`)
 }
